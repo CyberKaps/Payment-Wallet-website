@@ -12,10 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.userModel = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect(process.env.MONGO_URI);
+        yield mongoose_1.default.connect(process.env.MONGO_URL);
         console.log("MongoDB connected");
     }
     catch (error) {
@@ -24,3 +27,10 @@ const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 connectDB();
+const userSchema = new mongoose_1.default.Schema({
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    username: { type: String, required: true, unique: true, minLength: 3, MaxLength: 20 },
+    password: { type: String, required: true, minLength: 6 },
+});
+exports.userModel = mongoose_1.default.model("User", userSchema);

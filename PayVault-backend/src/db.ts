@@ -1,9 +1,11 @@
 import { kMaxLength } from "buffer";
 import mongoose, { model } from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI as string);
+    await mongoose.connect(process.env.MONGO_URL as string);
     console.log("MongoDB connected");
   } catch (error) {
     console.error("MongoDB connection error:", error);
@@ -20,7 +22,6 @@ const userSchema = new mongoose.Schema({
     password: {type: String, required: true, minLength: 6},
 })
 
-const userModel = mongoose.model("User", userSchema);
+export const userModel = mongoose.model("User", userSchema);
 
 
-module.exports = { userModel };
