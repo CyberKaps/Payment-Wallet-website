@@ -1,7 +1,7 @@
 
 import express, {Request, Response} from 'express';
 import dotenv from 'dotenv';
-import { userRouter } from './routes/user';
+import { router } from './routes/index';
 
 dotenv.config();
 
@@ -12,8 +12,7 @@ app.use(express.json()); //middleware to parse JSON bodies
 
 
 
-// app.use("/api/v1", router);
-app.use("/api/v1/user", userRouter);
+app.use("/api/v1", router);
 
 
 
