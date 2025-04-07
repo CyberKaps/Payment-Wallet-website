@@ -28,6 +28,17 @@ userRouter.post("/signup", async (req: any, res: any) => {
     const { firstName, lastName, username, password } = req.body;
 
     try{
+
+        const existingUser = await userModel.findOne({
+            username: req.body.username
+        })
+    
+        if (existingUser) {
+            return res.status(411).json({
+                message: "Email already taken"
+            })
+        }
+
         const user = await userModel.create({
             firstName,
             lastName,
