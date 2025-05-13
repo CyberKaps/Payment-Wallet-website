@@ -5,14 +5,9 @@ import jwt from "jsonwebtoken";
 
 export const authMiddleware = (req: any, res: any, next: any) => {
 
-    const authHeader = req.headers['authorization'] as string | undefined;
+    // const authHeader = req.headers['authorization'] as string | undefined;
+    const token = req.headers['authorization'];
 
-    if(!authHeader || !authHeader.startsWith('Bearer ')) {
-        res.status(403).json({ message: 'Unauthorized' });
-        return;
-    }
-
-    const token = authHeader.split(' ')[1];
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);

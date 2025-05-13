@@ -7,12 +7,8 @@ exports.authMiddleware = void 0;
 const config_1 = require("./config");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authMiddleware = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        res.status(403).json({ message: 'Unauthorized' });
-        return;
-    }
-    const token = authHeader.split(' ')[1];
+    // const authHeader = req.headers['authorization'] as string | undefined;
+    const token = req.headers['authorization'];
     try {
         const decoded = jsonwebtoken_1.default.verify(token, config_1.JWT_SECRET);
         //@ts-ignore
