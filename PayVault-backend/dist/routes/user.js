@@ -114,3 +114,26 @@ exports.userRouter.put("/", middleware_1.authMiddleware, (req, res) => __awaiter
         message: "Updated successfully"
     });
 }));
+exports.userRouter.get("/bulk", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const filter = req.query.filter || "";
+    const users = yield db_1.userModel.find({
+        $or: [{
+                firstName: {
+                    "$regex": filter
+                }
+            },
+            {
+                lastName: {
+                    "$regex": filter
+                }
+            }]
+    });
+    res.json({
+        user: users.map(user => ({
+            username: user.username,
+            firstNmae: user.firstName,
+            lastName: user.lastName,
+            _id: user._id
+        }))
+    });
+}));
