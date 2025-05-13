@@ -16,6 +16,7 @@ exports.userRouter = void 0;
 const express_1 = require("express");
 // import { Request, Response } from "express";
 const db_1 = require("../db");
+const db_2 = require("../db");
 const zod_1 = require("zod");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../config");
@@ -36,7 +37,7 @@ exports.userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 
     }
     const { firstName, lastName, username, password } = req.body;
     try {
-        const existingUser = yield db_1.userModel.findOne({
+        const existingUser = yield db_1.User.findOne({
             username: req.body.username
         });
         if (existingUser) {
@@ -44,16 +45,24 @@ exports.userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 
                 message: "Email already taken"
             });
         }
-        const user = yield db_1.userModel.create({
+        const user = yield db_1.User.create({
             firstName,
             lastName,
             username,
             password
         });
         const userId = user._id;
+        yield db_2.Account.create({
+            userId,
+            balance: 1 + Math.random() * 10000
+        });
         const token = jsonwebtoken_1.default.sign({
             userId,
         }, config_1.JWT_SECRET);
+        res.json({
+            message: "Sign up succeed",
+            token: token
+        });
     }
     catch (e) {
         return res.status(500).json({
@@ -61,10 +70,6 @@ exports.userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 
             error: e instanceof Error ? e.message : "Unknown error",
         });
     }
-    res.json({
-        message: "Sign up succeed",
-        token: "token"
-    });
 }));
 exports.userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const signinBody = zod_1.z.object({
@@ -78,7 +83,7 @@ exports.userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 
         });
     }
     const { username, password } = req.body;
-    const user = yield db_1.userModel.findOne({
+    const user = yield db_1.User.findOne({
         username,
         password
     });
@@ -107,7 +112,7 @@ exports.userRouter.put("/", middleware_1.authMiddleware, (req, res) => __awaiter
             message: "Validation error while updating",
         });
     }
-    yield db_1.userModel.updateOne({
+    yield db_1.User.updateOne({
         _id: req.userId
     }, req.body);
     res.json({
@@ -116,7 +121,7 @@ exports.userRouter.put("/", middleware_1.authMiddleware, (req, res) => __awaiter
 }));
 exports.userRouter.get("/bulk", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const filter = req.query.filter || "";
-    const users = yield db_1.userModel.find({
+    const users = yield db_1.User.find({
         $or: [{
                 firstName: {
                     "$regex": filter
