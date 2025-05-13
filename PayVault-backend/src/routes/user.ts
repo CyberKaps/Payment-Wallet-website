@@ -1,6 +1,7 @@
 import express, { Router } from "express";
 // import { Request, Response } from "express";
 import { User } from "../db";
+import { Account } from "../db";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -48,6 +49,12 @@ userRouter.post("/signup", async (req: any, res: any) => {
         })
 
         const userId = user._id;
+
+        await Account.create({
+            userId,
+            balance: 1 + Math.random() * 10000
+        })
+        
         const token = jwt.sign({
             userId,   
         }, JWT_SECRET)
