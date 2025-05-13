@@ -101,3 +101,25 @@ userRouter.post("/signin",async (req:any, res: any) => {
     })
 })
 
+userRouter.put("/", async (req: any, res: any) => {
+    const updateBody = z.object({
+        firstName: z.string().optional(),
+        lastName: z.string().optional(),
+        password: z.string().optional()
+    })
+
+    const parsBody = updateBody.safeParse(req.body);
+    if (!parsBody) {
+        return res.status(400).json({
+            message: "Validation error while updating",
+        });
+    }
+
+    await userModel.updateOne({
+        _id: req.userId
+    }, req.body)
+
+    res.json({
+        message: "Updated successfully"
+    })
+})
