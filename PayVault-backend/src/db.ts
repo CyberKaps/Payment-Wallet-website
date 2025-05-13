@@ -23,12 +23,12 @@ const userSchema = new mongoose.Schema({
     password: {type: String, required: true, minLength: 6},
 })
 
-export const userModel = mongoose.model("User", userSchema);
+export const User = mongoose.model("User", userSchema);
 
 const accountSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'userModel',
+    ref: 'User',
     required: true
   },
    balance: {
@@ -37,5 +37,5 @@ const accountSchema = new mongoose.Schema({
   }
 })
 
-export const accountModel = mongoose.model("Account", accountSchema);
+export const Account = mongoose.model("Account", accountSchema);
 

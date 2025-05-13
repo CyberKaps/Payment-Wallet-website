@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 // import { Request, Response } from "express";
-import { userModel } from "../db";
+import { User } from "../db";
 import { z } from "zod";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -30,7 +30,7 @@ userRouter.post("/signup", async (req: any, res: any) => {
 
     try{
 
-        const existingUser = await userModel.findOne({
+        const existingUser = await User.findOne({
             username: req.body.username
         })
     
@@ -40,7 +40,7 @@ userRouter.post("/signup", async (req: any, res: any) => {
             })
         }
 
-        const user = await userModel.create({
+        const user = await User.create({
             firstName,
             lastName,
             username,
@@ -81,7 +81,7 @@ userRouter.post("/signin",async (req:any, res: any) => {
     }
 
     const {username, password} = req.body;
-    const user = await userModel.findOne({
+    const user = await User.findOne({
         username,
         password
     })
@@ -118,7 +118,7 @@ userRouter.put("/",authMiddleware, async (req: any, res: any) => {
         });
     }
 
-    await userModel.updateOne({
+    await User.updateOne({
         _id: req.userId
     }, req.body)
 
@@ -130,7 +130,7 @@ userRouter.put("/",authMiddleware, async (req: any, res: any) => {
 userRouter.get("/bulk",async (req: any, res: any) => {
     const filter = req.query.filter || "";
 
-    const users = await userModel.find({
+    const users = await User.find({
         $or:[{
             firstName: {
                 "$regex": filter
