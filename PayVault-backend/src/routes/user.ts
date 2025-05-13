@@ -59,9 +59,45 @@ userRouter.post("/signup", async (req: any, res: any) => {
     }
 
     res.json({
-        message: "Sign up succeed"
+        message: "Sign up succeed",
+        token: "token"
     })
 }
 );
 
+userRouter.post("/signin",async (req:any, res: any) => {
+
+    const signinBody = z.object({
+        username: z.string().email(),
+        password: z.string()
+    })
+
+    const success = signinBody.safeParse(req.body);
+    if(!success) {
+        return res.status(411).json({
+            message: "incorrect inputs"
+        })
+    }
+
+    const {username, password} = req.body;
+    const user = await userModel.findOne({
+        username,
+        password
+    })
+
+    if(user){
+        const token = jwt.sign({
+            userId: user._id
+        }, JWT_SECRET);
+
+        res.json({
+            token: token
+        })
+        return;
+    }
+
+     res.status(411).json({
+        message: "Error while logging in"
+    })
+})
 

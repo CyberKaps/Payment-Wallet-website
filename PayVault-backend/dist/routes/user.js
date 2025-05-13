@@ -35,6 +35,14 @@ exports.userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 
     }
     const { firstName, lastName, username, password } = req.body;
     try {
+        const existingUser = yield db_1.userModel.findOne({
+            username: req.body.username
+        });
+        if (existingUser) {
+            return res.status(411).json({
+                message: "Email already taken"
+            });
+        }
         const user = yield db_1.userModel.create({
             firstName,
             lastName,
@@ -53,6 +61,36 @@ exports.userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 
         });
     }
     res.json({
-        message: "user route"
+        message: "Sign up succeed",
+        token: "token"
+    });
+}));
+exports.userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const signinBody = zod_1.z.object({
+        username: zod_1.z.string().email(),
+        password: zod_1.z.string()
+    });
+    const success = signinBody.safeParse(req.body);
+    if (!success) {
+        return res.status(411).json({
+            message: "incorrect inputs"
+        });
+    }
+    const { username, password } = req.body;
+    const user = yield db_1.userModel.findOne({
+        username,
+        password
+    });
+    if (user) {
+        const token = jsonwebtoken_1.default.sign({
+            userId: user._id
+        }, config_1.JWT_SECRET);
+        res.json({
+            token: token
+        });
+        return;
+    }
+    res.status(411).json({
+        message: "Error while logging in"
     });
 }));
