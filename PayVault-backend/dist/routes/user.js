@@ -19,6 +19,7 @@ const db_1 = require("../db");
 const zod_1 = require("zod");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../config");
+const middleware_1 = require("../middleware");
 exports.userRouter = (0, express_1.Router)();
 exports.userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const requiredFields = zod_1.z.object({
@@ -92,5 +93,24 @@ exports.userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 
     }
     res.status(411).json({
         message: "Error while logging in"
+    });
+}));
+const updateBody = zod_1.z.object({
+    firstName: zod_1.z.string().optional(),
+    lastName: zod_1.z.string().optional(),
+    password: zod_1.z.string().optional()
+});
+exports.userRouter.put("/", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const parsBody = updateBody.safeParse(req.body);
+    if (!parsBody) {
+        return res.status(400).json({
+            message: "Validation error while updating",
+        });
+    }
+    yield db_1.userModel.updateOne({
+        _id: req.userId
+    }, req.body);
+    res.json({
+        message: "Updated successfully"
     });
 }));

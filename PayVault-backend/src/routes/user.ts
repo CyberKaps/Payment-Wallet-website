@@ -5,6 +5,7 @@ import { z } from "zod";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { JWT_SECRET } from "../config";
+import { authMiddleware } from "../middleware";
 
 export const userRouter = Router();
 
@@ -101,12 +102,14 @@ userRouter.post("/signin",async (req:any, res: any) => {
     })
 })
 
-userRouter.put("/", async (req: any, res: any) => {
-    const updateBody = z.object({
+const updateBody = z.object({
         firstName: z.string().optional(),
         lastName: z.string().optional(),
         password: z.string().optional()
     })
+    
+userRouter.put("/",authMiddleware, async (req: any, res: any) => {
+    
 
     const parsBody = updateBody.safeParse(req.body);
     if (!parsBody) {
