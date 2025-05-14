@@ -47,6 +47,7 @@ exports.accountRouter.post("/transfer", middleware_1.authMiddleware, (req, res) 
     }
     //perform the transfer
     yield db_1.Account.updateOne({ userId: req.userId }, { $inc: { balance: -amount } }).session(yield session);
+    ``;
     yield db_1.Account.updateOne({ userId: to }, { $inc: { balance: amount } }).session(yield session);
     //commit the transaction
     yield (yield session).commitTransaction();
