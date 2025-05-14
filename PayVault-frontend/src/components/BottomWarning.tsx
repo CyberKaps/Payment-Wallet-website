@@ -11,10 +11,10 @@ export function BottomWarning({ label, buttonText, to }: BottomWarningValue) {
         <div>
             {label}
         </div>
-        <BrowserRouter>
+        {/* <BrowserRouter> */}
             <Link className="pointer underline pl-1 cursor-pointer" to={to}>
                 {buttonText}
             </Link>
-        </BrowserRouter>
+        {/* </BrowserRouter> */}
     </div>
 }
