@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
+import {SubHeading} from "./components/SubHeading"
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
           <Route path="/send" element={<SendMoney />} />
         </Routes>
       </BrowserRouter> */}
+      <SubHeading label={"Enter your information to create an account"}/>
     </>
   )
 }

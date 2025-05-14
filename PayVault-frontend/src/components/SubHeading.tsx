@@ -1,0 +1,9 @@
+interface LabelValue {
+    label: String
+}
+
+export function SubHeading({label}: LabelValue) {
+    return <div className="text-slate-500 text-md pt-1 px-4 pb-4">
+        {label}
+    </div>
+}
