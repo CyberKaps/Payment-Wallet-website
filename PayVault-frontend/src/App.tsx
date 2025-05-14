@@ -1,8 +1,9 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+// import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import {SubHeading} from "./components/SubHeading"
 import { InputBox } from './components/InputBox'
 import { Button } from './components/Button'
+import { BottomWarning } from './components/BottomWarning'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
       <SubHeading label={"Enter your information to create an account"}/>
       <InputBox label={"First Name"} placeholder={"Kalpesh"} />
       <Button onClick={() => {}} label={"Sign up"} />
+      <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to="/signin" />
     </>
   )
 }
