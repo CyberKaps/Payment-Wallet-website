@@ -4,6 +4,7 @@ import {SubHeading} from "./components/SubHeading"
 import { InputBox } from './components/InputBox'
 import { Button } from './components/Button'
 import { BottomWarning } from './components/BottomWarning'
+import { Signup } from './pages/Signup'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
       <InputBox label={"First Name"} placeholder={"Kalpesh"} />
       <Button onClick={() => {}} label={"Sign up"} />
       <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to="/signin" />
+      <Signup />
     </>
   )
 }
