@@ -26,13 +26,13 @@ export function Signup() {
                     setFirstName(e.target.value)
                 }} label={"First Name"} placeholder={"Kalpesh"} />
                 <InputBox onChange={(e:any) => {
-                    setFirstName(e.target.value)
+                    setLastName(e.target.value)
                 }} label={"Last Name"} placeholder={"Borde"} />
                 <InputBox onChange={(e:any) => {
-                    setFirstName(e.target.value)
+                    setUsername(e.target.value)
                 }} label={"Email"} placeholder={"bordekalpesh@gmail.com"} />
                 <InputBox onChange={(e:any) => {
-                    setFirstName(e.target.value)
+                    setPassword(e.target.value)
                 }} label={"Password"} placeholder={"12345678"} />
                 <Button onClick={async () => {
             const response = await axios.post("http://localhost:3000/api/v1/user/signup", {

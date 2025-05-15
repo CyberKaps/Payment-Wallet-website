@@ -1,6 +1,6 @@
 
 interface ButtonValue {
-    onClick: () => void;
+    onClick: any;
     label: string
 }
 
